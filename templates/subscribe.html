@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block title %}Subscribe{% endblock title %}
+{% block content %}
+<div class="container mb-5">
+  <h2>Subscribe to our Newsletter!</h2>
+  <p>
+  <ul>
+    <li>We will keep you updated on the latest reviews posted here!</li>
+    <li><strong class="d-inline-flex mb-2 text-primary-emphasis"><span class="badge rounded-pill bg-info"> We will not
+          share your email with anyone.</span></strong></li>
+  </ul>
+  </p>
+  <form action="" method="post">
+    <div class="form-text">
+    </div>
+    {% csrf_token %}
+    {{ form|crispy }}
+    <button class="btn btn-success" type="submit">Subscribe</button>
+  </form>
+</div>
+{% endblock content %}

@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}All genres{% endblock title %}
+{% block content %}
+<h1 class="text-center text-danger mb-3">All Genres</h1>
+<hr>
+<div class="container mt-2">
+	<div class="row row-cols-1 row-cols-md-4 g-4 mb-4">
+		<div class="col">
+			<a href="{% url 'genre_detail' 'SF' %}" class="card-link">
+				<div class="card h-100">
+					<img src="{% static 'thumbnails/SF.jpeg' %}" alt="Generic Science-fiction thumbnail"
+						style="object-fit: cover;" class="card-img-top">
+					<div class="card-body">
+						<h5 class="card-title">Science-Fiction</h5>
+						<p class="card-text">Sci-fi books often deal with futuristic scenarios, advanced technologies,
+							or alternative realities, which fascinate me. </p>
+					</div>
+				</div>
+			</a>
+		</div>
+		<div class="col">
+			<a href="{% url 'genre_detail' 'NF' %}" class="card-link">
+				<div class="card h-100">
+					<img src="{% static 'thumbnails/NF.jpeg' %}" alt="Generic Non-fiction thumbnail"
+						style="object-fit: cover;" class="card-img-top">
+					<div class="card-body">
+						<h5 class="card-title">Non-fiction</h5>
+						<p class="card-text"> Non-fiction books often cover topics such as history, science, philosophy,
+							or biography, which are enlightening.
+						</p>
+					</div>
+				</div>
+			</a>
+		</div>
+		<div class="col">
+			<a href="{% url 'genre_detail' 'TH' %}" class="card-link">
+				<div class="card h-100">
+					<img src="{% static 'thumbnails/TH.jpeg' %}" alt="Generic Thriller thumbnail"
+						style="object-fit: cover;" class="card-img-top">
+					<div class="card-body">
+						<h5 class="card-title">Thriller and action</h5>
+						<p class="card-text">Mystery and thriller books often involve suspense, puzzles, or twists,
+							which are exciting and captivating.</p>
+					</div>
+				</div>
+			</a>
+		</div>
+		<div class="col">
+			<a href="{% url 'genre_detail' 'HO' %}" class="card-link">
+				<div class="card h-100">
+					<img src="{% static 'thumbnails/HO.jpeg' %}" alt="Generic Horror thumbnail"
+						style="object-fit: cover;" class="card-img-top">
+					<div class="card-body">
+						<h5 class="card-title">Horror</h5>
+						<p class="card-text">A book that chills your spine and haunts your dreams with terrifying or
+							macabre elements, such as vampires,
+							or zombies.</p>
+					</div>
+				</div>
+			</a>
+		</div>
+
+	</div>
+	<div class="row row-cols-1 row-cols-md-4 g-4 mb-4">
+		<div class="col ">
+			<a href="{% url 'genre_detail' 'CO' %}" class="card-link">
+				<div class="card h-100">
+					<img src="{% static 'thumbnails/CO.jpeg' %}" alt="Generic Comedy thumbnail"
+						style="object-fit: cover;" class="card-img-top">
+					<div class="card-body">
+						<h5 class="card-title">Comedy</h5>
+						<p class="card-text">A book that tickles your funny bone and brightens your mood with hilarious
+							and clever jokes, puns,
+							and satire.</p>
+					</div>
+				</div>
+			</a>
+		</div>
+		<div class="col ">
+			<a href="{% url 'genre_detail' 'RO' %}" class="card-link">
+				<div class="card h-100">
+					<img src="{% static 'thumbnails/RO.jpeg' %}" alt="Generic Romance thumbnail"
+						style="object-fit: cover;" class="card-img-top">
+					<div class="card-body">
+						<h5 class="card-title">Romance</h5>
+						<p class="card-text">Books that captivate your heart and ignite your passion with sensual and
+							emotional stories of love and
+							relationship.</p>
+					</div>
+				</div>
+			</a>
+		</div>
+		<div class="col">
+			<a href="{% url 'genre_detail' 'FE' %}" class="card-link">
+				<div class="card h-100">
+					<img src="{% static 'thumbnails/FE.jpeg' %}" alt="Generic Featured thumbnail"
+						style="object-fit: cover;" class="card-img-top">
+					<div class="card-body">
+						<h5 class="card-title">Featured</h5>
+						<p class="card-text">Guest articles on various topic related to books and book reviewing, such
+							as making money from books.</p>
+					</div>
+				</div>
+			</a>
+		</div>
+		<div class="col ">
+			<a href="{% url 'genre_detail' 'OT' %}" class="card-link">
+				<div class="card h-100">
+					<img src="{% static 'thumbnails/OT.jpeg' %}" alt="Generic Other thumbnail"
+						style="object-fit: cover;" class="card-img-top">
+					<div class="card-body">
+						<h5 class="card-title">Other</h5>
+						<p class="card-text">Describes a genre of books that do not belong to any of the classic genres
+							or that is hard to classify.</p>
+					</div>
+				</div>
+			</a>
+		</div>
+
+	</div>
+</div>
+{% endblock content %}

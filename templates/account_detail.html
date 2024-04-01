@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Account info{% endblock title %}
+
+{% block content %}
+<div class="card mb-5 mx-auto" style="max-width: 540px;">
+  <div class="row g-1 ">
+    <div class="col-md-4 container">
+      <i class="bi bi-person-square" style="font-size: 10rem"></i>
+    </div>
+    <div class="col-md-8">
+      <div class="card-body">
+        <h5 class="card-title">Account details</h5>
+		<p class="card-text">Username: {{user.username}} </p>
+        <p class="card-text">Account Type: 
+			{% if user.is_staff %}
+				<i>Admin</i>
+			{% elif perms.blog.is_blogger%}
+				<i>Blogger</i>
+			{% else %}
+				<i>Regular</i>
+			{% endif %}
+		</p>
+        <p class="card-text">Date Joined: {{user.date_joined}}  </p>
+	    <p class="card-text"><a href="{% url 'bookmarks' user.username %}">Bookmarked posts </a>: {{ num_bookmarked_posts }} </p> 
+	    <p class="card-text">
+		{% if perms.blog.is_blogger %}
+		 Created posts: {{ num_created_posts}}
+		{% endif %}
+		</p>
+      </div>
+    </div>
+  </div>
+<hr>
+<ul>
+<li><a href="{% url 'password_change' %}">Change password </a></li>
+<li><a href="">Edit account </a></li>
+</ul>
+</div>
+{% endblock content %}

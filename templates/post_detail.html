@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="row g-5">
+	<div class='col-md-8'>
+		<h2 class="display-5 link-body-emphasis mb-1">{{ indiv_post.title}}</h2>
+		{% if user.is_authenticated %}
+		{% if user_bookmarked_this %}
+			<a name="{{ indiv_post.pk }}" class="bookmark_link d-flex justify-content-end" id="bmk" ><i class="bi bi-bookmark-check-fill" style="font-size: 2rem" ></i>
+			</a>
+			{% else %}
+			<a name="{{ indiv_post.pk }}" class="bookmark_link d-flex justify-content-end" id="bmk"><i class="bi bi-bookmark-plus-fill" style="font-size: 2rem"></i>
+			</a>
+		{% endif %}
+		{% endif %}
+		<p class="blog-post">{{ indiv_post.body|safe|linebreaks }}</p>
+		<hr>
+		<div class="mb-3 text-body-secondary">{{indiv_post.author}} | {{ indiv_post.date }}
+		</div>
+		{%if indiv_post.affiliate_link is not none%}
+		<div  class="mb-3">
+		<p class="text-muted small">Disclosure: Some of the links on this page are affiliate links. If you click through and make a purchase, we may earn a commission at no additional cost to you.</p>
+		<p><a class="btn btn-warning"  href="{{ indiv_post.affiliate_link }}" target="_blank" rel="nofollow"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-amazon" viewBox="0 0 16 16">
+  <path d="M10.813 11.968c.157.083.36.074.5-.05l.005.005a90 90 0 0 1 1.623-1.405c.173-.143.143-.372.006-.563l-.125-.17c-.345-.465-.673-.906-.673-1.791v-3.3l.001-.335c.008-1.265.014-2.421-.933-3.305C10.404.274 9.06 0 8.03 0 6.017 0 3.77.75 3.296 3.24c-.047.264.143.404.316.443l2.054.22c.19-.009.33-.196.366-.387.176-.857.896-1.271 1.703-1.271.435 0 .929.16 1.188.55.264.39.26.91.257 1.376v.432q-.3.033-.621.065c-1.113.114-2.397.246-3.36.67C3.873 5.91 2.94 7.08 2.94 8.798c0 2.2 1.387 3.298 3.168 3.298 1.506 0 2.328-.354 3.489-1.54l.167.246c.274.405.456.675 1.047 1.166ZM6.03 8.431C6.03 6.627 7.647 6.3 9.177 6.3v.57c.001.776.002 1.434-.396 2.133-.336.595-.87.961-1.465.961-.812 0-1.286-.619-1.286-1.533M.435 12.174c2.629 1.603 6.698 4.084 13.183.997.28-.116.475.078.199.431C13.538 13.96 11.312 16 7.57 16 3.832 16 .968 13.446.094 12.386c-.24-.275.036-.4.199-.299z"/>
+  <path d="M13.828 11.943c.567-.07 1.468-.027 1.645.204.135.176-.004.966-.233 1.533-.23.563-.572.961-.762 1.115s-.333.094-.23-.137c.105-.23.684-1.663.455-1.963-.213-.278-1.177-.177-1.625-.13l-.09.009q-.142.013-.233.024c-.193.021-.245.027-.274-.032-.074-.209.779-.556 1.347-.623"/>
+</svg> Buy this book</a></p>
+		</div>
+		{% endif %}
+		{% if user.is_authenticated and perms.blog.is_blogger %}
+		<div class="btn-group mb-3" role="group">
+			<a class="btn btn-success btn-sm" href="{% url 'post_edit' indiv_post.pk %}">+ Edit Post</a>
+			<a class="btn btn-danger btn-sm" href="{% url 'post_delete' indiv_post.pk %}">- Delete Blog Post</a>
+		</div>
+		{% endif %}
+	</div>
+	<div class='col'>
+		<div class="position-sticky" style="top: 6rem;">
+			<div>
+				<h4 class="fst-italic">Related posts</h4>
+				<ul class="list-unstyled">
+					{% for related_post in recent_related%}
+
+					{% if related_post.pk != indiv_post.pk %}
+					<li>
+						<a class="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top"
+							href="{% url 'post_detail' related_post.pk %}">
+							{% if related_post.genre == "SF" %}
+							<img src="{% static 'thumbnails/SF.jpeg' %}" alt="Generic Science-fiction thumbnail"
+								width="96" height="96">
+							{% elif related_post.genre == "NF" %}
+							<img src="{% static 'thumbnails/NF.jpeg' %}" alt="Generic Non-fiction thumbnail" width="96"
+								height="96">
+							{% elif related_post.genre == "TH" %}
+							<img src="{% static 'thumbnails/TH.jpeg' %}" alt="Generic Thriller thumbnail" width="96"
+								height="96">
+							{% elif related_post.genre == "HO" %}
+							<img src="{% static 'thumbnails/HO.jpeg' %}" alt="Generic Horror thumbnail" width="96"
+								height="96">
+							{% elif related_post.genre == "CO" %}
+							<img src="{% static 'thumbnails/CO.jpeg' %}" alt="Generic Comedy thumbnail" width="96"
+								height="96">
+							{% elif related_post.genre == "RO" %}
+							<img src="{% static 'thumbnails/RO.jpeg' %}" alt="Generic Romance thumbnail" width="96"
+								height="96">
+							{% elif related_post.genre == "FE" %}
+							<img src="{% static 'thumbnails/FE.jpeg' %}" alt="Generic Featured thumbnail" width="96"
+								height="96">
+							{%else%}
+							<img src="{% static 'thumbnails/OT.jpeg' %}" alt="Generic Other thumbnail" width="96"
+								height="96">
+							{% endif %}
+							<div class="col-lg-8">
+								<h6 class="mb-0">{{ related_post.title }}</h6>
+								<small class="text-body-secondary">{{ related_post.date }}</small>
+							</div>
+						</a>
+					</li>
+					{% endif %}
+
+					{% endfor %}
+
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+$('.bookmark_link').click(function(){
+    $.ajax({
+             type: 'POST',
+             url:'{% url "post_detail" indiv_post.pk %}', 
+             data: {'post_pk': $(this).attr('name'),'operation':'bookmark_update','csrfmiddlewaretoken': '{{ csrf_token }}'},
+             dataType: "json",
+             success: function(response) {
+			  var bmkd=document.getElementById("bmk");
+			  var icon = bmkd.querySelector('i');
+                    if(response.bookmarked==true){
+					   icon.classList.remove('bi-bookmark-plus-fill');
+					   icon.classList.add('bi-bookmark-check-fill');
+					  }
+                    else if(response.bookmarked==false){
+					  icon.classList.remove('bi-bookmark-check-fill');
+					  icon.classList.add('bi-bookmark-plus-fill');
+                    }
+
+
+              }
+
+        });
+
+  })
+</script>
+{% endblock content %}
