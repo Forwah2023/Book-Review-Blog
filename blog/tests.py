@@ -80,8 +80,8 @@ class BlogTests(TestCase):
 		'summary': 'a test summary',
 		})
 		self.assertEqual(response.status_code, 302)
-		self.assertRedirects(response, '%s?next=/post/new/' % (reverse('login')))
-		response = self.client.get('%s?next=/post/new/' % (reverse('login')))
+		self.assertRedirects(response, '%s?next=/post/new/' % (reverse('account_login')))
+		response = self.client.get('%s?next=/post/new/' % (reverse('account_login')))
 		self.assertContains(response, 'Log In')
 		
 		# tests for logged in users
