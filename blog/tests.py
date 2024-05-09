@@ -97,6 +97,7 @@ class BlogTests(TestCase):
         # tests for logged in bloggers 
 		
 	def test_CRUD_for_logged_in_user_without_permission(self):
+		'''Checking if non-bloggers cannot create, edited, and delete posts but can view posts'''
 		self.client.login(username='testuser', password='secret')
 		response_create = self.client.post(reverse('post_new'), {
 		'title': 'New title',
@@ -106,13 +107,13 @@ class BlogTests(TestCase):
 		'summary': 'a test summary',
 		})
 		
-		response_edit = self.client.post(reverse('post_edit', args=str(self.post.pk)), {
+		response_edit = self.client.post(reverse('post_edit', args=[str(self.post.pk)]), {
 		'title': 'Updated title',
 		'body': 'Updated text',
 		'summary': 'a test summary',
 		'rating': 5
 		})
-		response_delete = self.client.get(reverse('post_delete', args=str(self.post.pk)))
+		response_delete = self.client.get(reverse('post_delete', args=[str(self.post.pk)]))
 		response_detail = self.client.get(self.post_url)
 		self.assertEqual(response_create.status_code, 403) #forbidden
 		self.assertEqual(response_edit.status_code,403)
@@ -136,14 +137,14 @@ class BlogTests(TestCase):
 		'summary': 'a test summary',
 		})
 		
-		response_edit = self.client.post(reverse('post_edit', args=str(self.post.pk)), {
+		response_edit = self.client.post(reverse('post_edit', args=[str(self.post.pk)]), {
 		'title': 'Updated title',
 		'body': 'Updated text',
 		'summary': 'a test summary',
 		'rating': 5
 		})
 		
-		response_delete = self.client.get(reverse('post_delete', args=str(self.post.pk)))
+		response_delete = self.client.get(reverse('post_delete', args=[str(self.post.pk)]))
 		response_detail = self.client.get(self.post_url)
 		response_home = self.client.get(reverse('home'))
 		
