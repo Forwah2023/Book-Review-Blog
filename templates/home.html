@@ -53,7 +53,7 @@
 
 		<div class="mb-1 text-body-secondary">{{post.author}} | {{ post.date }}</div>
 		<p class="card-text mb-auto">{{ post.summary}}</p>
-		<a href="{% url 'post_detail' post.pk %}" class="icon-link gap-1 icon-link-hover stretched-link">
+		<a href="{{post.get_absolute_url}}" class="icon-link gap-1 icon-link-hover stretched-link">
 			Read more<svg class="bi">
 				<use xlink:href="#chevron-right" />
 			</svg>
