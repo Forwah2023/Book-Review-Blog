@@ -24,6 +24,7 @@ class Post(models.Model):
 	date = models.DateTimeField(auto_now_add=True)
 	rating=models.PositiveIntegerField(null=True,blank=True,default=1,validators=[MinValueValidator(1), MaxValueValidator(5)])
 	affiliate_link = models.URLField(verbose_name='Affiliate Link', help_text='Enter the URL of the affiliate link for this product',null=True,blank=True)
+	cover = models.ImageField(upload_to='covers/',null=True,blank=True)
 	
 	class Meta:
 		permissions = [

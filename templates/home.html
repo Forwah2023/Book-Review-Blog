@@ -60,22 +60,26 @@
 		</a>
 	</div>
 	<div class="col-auto d-none d-lg-block">
-		{% if post.genre == "SF" %}
-		<img src="{% static 'thumbnails/SF.jpeg' %}" alt="Generic Science-fiction thumbnail" width="200" height="200">
-		{% elif post.genre == "NF" %}
-		<img src="{% static 'thumbnails/NF.jpeg' %}" alt="Generic Non-fiction thumbnail" width="200" height="200">
-		{% elif post.genre == "TH" %}
-		<img src="{% static 'thumbnails/TH.jpeg' %}" alt="Generic Thriller thumbnail" width="200" height="200">
-		{% elif post.genre == "HO" %}
-		<img src="{% static 'thumbnails/HO.jpeg' %}" alt="Generic Horror thumbnail" width="200" height="200">
-		{% elif post.genre == "CO" %}
-		<img src="{% static 'thumbnails/CO.jpeg' %}" alt="Generic Comedy thumbnail" width="200" height="200">
-		{% elif post.genre == "RO" %}
-		<img src="{% static 'thumbnails/RO.jpeg' %}" alt="Generic Romance thumbnail" width="200" height="200">
-		{% elif post.genre == "FE" %}
-		<img src="{% static 'thumbnails/FE.jpeg' %}" alt="Generic Featured thumbnail" width="200" height="200">
+		{% if post.cover %}
+		<img class="bookcover" src="{{ post.cover.url}}" alt="{{ post.title }}" width="200" height="250">
 		{%else%}
-		<img src="{% static 'thumbnails/OT.jpeg' %}" alt="Generic Other thumbnail" width="200" height="200">
+			{% if post.genre == "SF" %}
+			<img src="{% static 'thumbnails/SF.jpeg' %}" alt="Generic Science-fiction thumbnail" width="200" height="200">
+			{% elif post.genre == "NF" %}
+			<img src="{% static 'thumbnails/NF.jpeg' %}" alt="Generic Non-fiction thumbnail" width="200" height="200">
+			{% elif post.genre == "TH" %}
+			<img src="{% static 'thumbnails/TH.jpeg' %}" alt="Generic Thriller thumbnail" width="200" height="200">
+			{% elif post.genre == "HO" %}
+			<img src="{% static 'thumbnails/HO.jpeg' %}" alt="Generic Horror thumbnail" width="200" height="200">
+			{% elif post.genre == "CO" %}
+			<img src="{% static 'thumbnails/CO.jpeg' %}" alt="Generic Comedy thumbnail" width="200" height="200">
+			{% elif post.genre == "RO" %}
+			<img src="{% static 'thumbnails/RO.jpeg' %}" alt="Generic Romance thumbnail" width="200" height="200">
+			{% elif post.genre == "FE" %}
+			<img src="{% static 'thumbnails/FE.jpeg' %}" alt="Generic Featured thumbnail" width="200" height="200">
+			{%else%}
+			<img src="{% static 'thumbnails/OT.jpeg' %}" alt="Generic Other thumbnail" width="200" height="200">
+			{% endif %}
 		{% endif %}
 	</div>
 </div>
