@@ -77,6 +77,7 @@ class BlogCreateView(LoginRequiredMixin,PermissionRequiredMixin,CreateView):
 	#fields = '__all__'
 	fields = ('title','genre', 'body','summary','rating','affiliate_link')
 	permission_required = 'blog.is_blogger'
+	login_url = 'account_login'
 	# matches created form to current user
 	def form_valid(self, form):
 		form.instance.author = self.request.user
@@ -87,6 +88,7 @@ class BlogUpdateView(LoginRequiredMixin,PermissionRequiredMixin,UpdateView):
 	template_name = 'post_edit.html'
 	fields =['title', 'body','summary','rating','affiliate_link']#  '__all__'
 	permission_required = 'blog.is_blogger'
+	login_url = 'account_login'
 	def dispatch(self, request, *args, **kwargs):
 		obj = self.get_object()
 		if obj.author != self.request.user:
@@ -98,6 +100,7 @@ class BlogDeleteView(LoginRequiredMixin,PermissionRequiredMixin,DeleteView):
 	template_name = 'post_delete.html'
 	success_url = reverse_lazy('home')
 	permission_required = 'blog.is_blogger'
+	login_url = 'account_login'
 	def dispatch(self, request, *args, **kwargs):
 		obj = self.get_object()
 		if obj.author != self.request.user:
@@ -109,6 +112,7 @@ class BookmarkListView(LoginRequiredMixin,ListView):
 	paginate_by = 10
 	template_name = 'bookmark_list.html'
 	context_object_name = 'bookmark_list'
+	login_url = 'account_login'
 	def get_queryset(self):
 		qs=Bookmark.objects.filter(user=self.request.user)
 		return qs
