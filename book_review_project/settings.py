@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
 	'debug_toolbar',
+	'django_bleach',
 ]
 
 MIDDLEWARE = [
@@ -184,4 +185,13 @@ ACCOUNT_UNIQUE_EMAIL = True
 
 DEFAULT_FROM_EMAIL = 'admin@strongbookreviews.com'
 
+#Django bleach settings
+BLEACH_ALLOWED_TAGS =['p', 'b', 'i', 'u', 'em','br', 'strong', 'a','img', 'h3', 'h4', 'h5', 'h6']
+BLEACH_ALLOWED_ATTRIBUTES = ['href', 'style']
+BLEACH_ALLOWED_STYLES = ['font-family', 'font-weight', 'text-decoration', 'font-variant']
+BLEACH_ALLOWED_PROTOCOLS = ['https']
+BLEACH_STRIP_TAGS = True
+BLEACH_STRIP_COMMENTS = True
 
+#XSS broswer protection
+SECURE_BROWSER_XSS_FILTER = True
