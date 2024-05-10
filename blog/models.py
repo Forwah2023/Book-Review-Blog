@@ -2,7 +2,7 @@ import uuid
 from django.db import models
 from django.urls import reverse
 from django.contrib.auth import get_user_model
-from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.validators import MinValueValidator, MaxValueValidator, URLValidator
 
 
 class Post(models.Model):
@@ -23,7 +23,7 @@ class Post(models.Model):
 	summary=models.CharField(max_length=300)
 	date = models.DateTimeField(auto_now_add=True)
 	rating=models.PositiveIntegerField(null=True,blank=True,default=1,validators=[MinValueValidator(1), MaxValueValidator(5)])
-	affiliate_link = models.URLField(verbose_name='Affiliate Link', help_text='Enter the URL of the affiliate link for this product',null=True,blank=True)
+	affiliate_link = models.URLField(validators=[URLValidator(schemes=['https'])],verbose_name='Affiliate Link', help_text='Enter the URL of the affiliate link for this product',null=True,blank=True)
 	cover = models.ImageField(upload_to='covers/',null=True,blank=True)
 	
 	class Meta:
