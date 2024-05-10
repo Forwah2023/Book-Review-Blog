@@ -34,8 +34,9 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG')
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['.herokuapp.com', 'localhost', '127.0.0.1']
+# django-debug-toolbar
+INTERNAL_IPS = ['127.0.0.1']
 
 # Application definition
 
@@ -55,6 +56,7 @@ INSTALLED_APPS = [
 	'crispy_bootstrap5',
     'allauth',
     'allauth.account',
+	'debug_toolbar',
 ]
 
 MIDDLEWARE = [
@@ -66,6 +68,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'allauth.account.middleware.AccountMiddleware',
+	'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'book_review_project.urls'
@@ -180,3 +183,5 @@ ACCOUNT_UNIQUE_EMAIL = True
 
 
 DEFAULT_FROM_EMAIL = 'admin@strongbookreviews.com'
+
+
