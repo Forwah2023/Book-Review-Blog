@@ -196,7 +196,7 @@ BLEACH_STRIP_COMMENTS = True
 ENVIRONMENT=env('ENVIRONMENT',default='development')
 
 if ENVIRONMENT == 'production':
-	XSS broswer protection
+	#XSS broswer protection
 	SECURE_BROWSER_XSS_FILTER = True
 	X_FRAME_OPTIONS = 'DENY'
 	SECURE_SSL_REDIRECT = True
