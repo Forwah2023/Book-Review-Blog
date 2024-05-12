@@ -97,17 +97,29 @@ WSGI_APPLICATION = 'book_review_project.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
+ON_HEROKU = 'DYNO' in os.environ
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'Mydb',
-		'USER': env('DBUSER'),
-		'PASSWORD':env('DBPASSWORD'), 
-		'HOST': 'localhost',
-		'PORT': 5432
+if ON_HEROKU:
+	# Heroku PostgreSQL configuration
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.environ.get('DATABASE_URL'),
+        }
     }
-}
+
+else:	
+	# Local development configuration
+	DATABASES = {
+		'default': {
+			'ENGINE': 'django.db.backends.postgresql',
+			'NAME': 'Mydb',
+			'USER': env('DBUSER'),
+			'PASSWORD':env('DBPASSWORD'), 
+			'HOST': 'localhost',
+			'PORT': 5432
+		}
+	}
 
 
 # Password validation
@@ -211,7 +223,8 @@ if ENVIRONMENT == 'production':
 	SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 
-# Heroku database config
-import dj_database_url
+# Heroku database config from dj_database_url
+'''import dj_database_url
 db_from_env = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(db_from_env)
+'''
