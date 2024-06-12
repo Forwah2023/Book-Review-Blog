@@ -42,11 +42,11 @@ INTERNAL_IPS = ['127.0.0.1']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
+    'whitenoise.runserver_nostatic',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-	'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
     'django.contrib.sites',
     #local
@@ -108,6 +108,10 @@ if ON_HEROKU:
             'NAME': os.environ.get('DATABASE_URL'),
         }
     }
+	# Heroku database config from dj_database_url
+    import dj_database_url
+    db_from_env = dj_database_url.config(conn_max_age=500)
+    DATABASES['default'].update(db_from_env)
 
 else:	
 	# Local development configuration
@@ -164,6 +168,12 @@ STATICFILES_FINDERS = [
 "django.contrib.staticfiles.finders.FileSystemFinder",
 "django.contrib.staticfiles.finders.AppDirectoriesFinder",
 ]
+# for compression and caching with Whitenoise
+STORAGES = {
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -171,13 +181,13 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 #allow if S3 bucketeer enabled
 S3_ENABLED=env('S3_ENABLED',cast=bool, default=False)
 if S3_ENABLED:
-	AWS_ACCESS_KEY_ID = env('BUCKETEER_AWS_ACCESS_KEY_ID')
-	AWS_SECRET_ACCESS_KEY =env('BUCKETEER_AWS_SECRET_ACCESS_KEY')
-	AWS_STORAGE_BUCKET_NAME = env('BUCKETEER_BUCKET_NAME')
-	AWS_S3_REGION_NAME = env('BUCKETEER_AWS_REGION')
-	#AWS_S3_ENDPOINT_URL = f'https://{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
-	AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
-	DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    AWS_ACCESS_KEY_ID = env('BUCKETEER_AWS_ACCESS_KEY_ID')
+    AWS_SECRET_ACCESS_KEY =env('BUCKETEER_AWS_SECRET_ACCESS_KEY')
+    AWS_STORAGE_BUCKET_NAME = env('BUCKETEER_BUCKET_NAME')
+    AWS_S3_REGION_NAME = env('BUCKETEER_AWS_REGION')
+    #AWS_S3_ENDPOINT_URL = f'https://{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+    AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
+    STORAGES["default"]={"BACKEND": "storages.backends.s3boto3.S3Boto3Storage",}
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
@@ -191,7 +201,7 @@ AUTH_USER_MODEL = 'users.CustomUser'
 #LOGOUT_REDIRECT_URL = 'home'
 
 # django-allauth config
-SITE_ID = 1
+SITE_ID = 2
 AUTHENTICATION_BACKENDS = (
 'django.contrib.auth.backends.ModelBackend',
 'allauth.account.auth_backends.AuthenticationBackend', 
@@ -236,7 +246,3 @@ if ENVIRONMENT == 'production':
 	SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 
-# Heroku database config from dj_database_url
-import dj_database_url
-db_from_env = dj_database_url.config(conn_max_age=500)
-DATABASES['default'].update(db_from_env)
