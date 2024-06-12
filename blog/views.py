@@ -8,6 +8,8 @@ from django.http import HttpResponse
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from .forms import SubscriberForm
+from .models import Subscriber
+from django.core.mail import send_mail
 from django.db.models import Q
 
 from .models import Post,Bookmark
@@ -142,9 +144,23 @@ class AllGenreView(TemplateView):
 #subscription views
 	
 class SubscribeView(CreateView):
-	form_class = SubscriberForm
-	success_url = reverse_lazy('thanks')
-	template_name = 'subscribe.html'
+    model=Subscriber
+    form_class = SubscriberForm
+    success_url = reverse_lazy('thanks')
+    template_name = 'subscribe.html'
+    def form_valid(self, form):
+        # Call the base class form_valid to save the object
+        response = super().form_valid(form)
+        
+        # Send an email notification, which will be printed to the console
+        send_mail(
+            'Subscription Confirmation',
+            'Thank you for subscribing to the Strong Book Reviews newsletter!',
+            'admin@strongbookreviews.com',
+            [form.cleaned_data['email']],
+            fail_silently=False,
+            )
+        return response
 
 class SubscribeThanksView(TemplateView):
 	template_name = 'thanks.html'
