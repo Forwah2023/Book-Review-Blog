@@ -9,6 +9,7 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from .forms import SubscriberForm
 from .models import Subscriber
+from django.contrib.sites.models import Site
 from django.core.mail import send_mail
 from django.db.models import Q
 
@@ -82,8 +83,24 @@ class BlogCreateView(LoginRequiredMixin,PermissionRequiredMixin,CreateView):
 	login_url = 'account_login'
 	# matches created form to current user
 	def form_valid(self, form):
-		form.instance.author = self.request.user
-		return super().form_valid(form)
+		blog_post = form.instance
+		blog_post.author = self.request.user
+		response=super().form_valid(form)
+        # Get the newly created BlogPost instance
+		post_title = blog_post.title
+		post_author = blog_post.author
+		post_summary=blog_post.summary
+		current_site = Site.objects.get_current()
+        # Send emails to subscribers
+		for subs in Subscriber.objects.all():
+			send_mail(
+                f'New book review from strongbookreviews.com',
+                f' Hi {subs.name}, check out our most recent review {post_title} by {post_author}. Summary: {post_summary}.\
+                Sincerely, {current_site.domain}',
+                'admin@strongbookreviews.com',   
+                [subs.email],
+            )
+		return response
 	
 class BlogUpdateView(LoginRequiredMixin,PermissionRequiredMixin,UpdateView): 
 	model = Post
@@ -154,7 +171,7 @@ class SubscribeView(CreateView):
         
         # Send an email notification, which will be printed to the console
         send_mail(
-            'Subscription Confirmation',
+            'Subscription Confirmation!',
             'Thank you for subscribing to the Strong Book Reviews newsletter!',
             'admin@strongbookreviews.com',
             [form.cleaned_data['email']],
