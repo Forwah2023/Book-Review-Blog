@@ -175,8 +175,6 @@ STORAGES = {
     },
 }
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 #allow if S3 bucketeer enabled
 S3_ENABLED=env('S3_ENABLED',cast=bool, default=False)
@@ -187,7 +185,18 @@ if S3_ENABLED:
     AWS_S3_REGION_NAME = env('BUCKETEER_AWS_REGION')
     #AWS_S3_ENDPOINT_URL = f'https://{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
     AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
-    STORAGES["default"]={"BACKEND": "storages.backends.s3boto3.S3Boto3Storage",}
+    STORAGES["default"]={
+        "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+     }
+else:
+    STORAGES["default"]={
+        "BACKEND":'django.core.files.storage.FileSystemStorage' ,
+     }
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
