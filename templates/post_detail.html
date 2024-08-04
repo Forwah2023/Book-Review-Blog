@@ -42,7 +42,7 @@
 	<div class='col'>
 		<div class="position-sticky" style="top: 6rem;">
 			<div>
-				<h4 class="fst-italic">Related posts</h4>
+				<h4 class="fst-italic">Of the same genre</h4>
 				<ul class="list-unstyled">
 					{% for related_post in recent_related%}
 
@@ -50,30 +50,35 @@
 					<li>
 						<a class="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top"
 							href="{% url 'post_detail' related_post.pk %}">
-							{% if related_post.genre == "SF" %}
-							<img src="{% static 'thumbnails/SF.jpeg' %}" alt="Generic Science-fiction thumbnail"
-								width="96" height="96">
-							{% elif related_post.genre == "NF" %}
-							<img src="{% static 'thumbnails/NF.jpeg' %}" alt="Generic Non-fiction thumbnail" width="96"
-								height="96">
-							{% elif related_post.genre == "TH" %}
-							<img src="{% static 'thumbnails/TH.jpeg' %}" alt="Generic Thriller thumbnail" width="96"
-								height="96">
-							{% elif related_post.genre == "HO" %}
-							<img src="{% static 'thumbnails/HO.jpeg' %}" alt="Generic Horror thumbnail" width="96"
-								height="96">
-							{% elif related_post.genre == "CO" %}
-							<img src="{% static 'thumbnails/CO.jpeg' %}" alt="Generic Comedy thumbnail" width="96"
-								height="96">
-							{% elif related_post.genre == "RO" %}
-							<img src="{% static 'thumbnails/RO.jpeg' %}" alt="Generic Romance thumbnail" width="96"
-								height="96">
-							{% elif related_post.genre == "FE" %}
-							<img src="{% static 'thumbnails/FE.jpeg' %}" alt="Generic Featured thumbnail" width="96"
-								height="96">
+							{% if related_post.cover %}
+							<img class="bookcover" src="{{ related_post.cover.url}}" alt="{{ related_post.title }}" width="96" height="96">
 							{%else%}
-							<img src="{% static 'thumbnails/OT.jpeg' %}" alt="Generic Other thumbnail" width="96"
-								height="96">
+
+								{% if related_post.genre == "SF" %}
+								<img src="{% static 'thumbnails/SF.jpeg' %}" alt="Generic Science-fiction thumbnail"
+									width="96" height="96">
+								{% elif related_post.genre == "NF" %}
+								<img src="{% static 'thumbnails/NF.jpeg' %}" alt="Generic Non-fiction thumbnail" width="96"
+									height="96">
+								{% elif related_post.genre == "TH" %}
+								<img src="{% static 'thumbnails/TH.jpeg' %}" alt="Generic Thriller thumbnail" width="96"
+									height="96">
+								{% elif related_post.genre == "HO" %}
+								<img src="{% static 'thumbnails/HO.jpeg' %}" alt="Generic Horror thumbnail" width="96"
+									height="96">
+								{% elif related_post.genre == "CO" %}
+								<img src="{% static 'thumbnails/CO.jpeg' %}" alt="Generic Comedy thumbnail" width="96"
+									height="96">
+								{% elif related_post.genre == "RO" %}
+								<img src="{% static 'thumbnails/RO.jpeg' %}" alt="Generic Romance thumbnail" width="96"
+									height="96">
+								{% elif related_post.genre == "FE" %}
+								<img src="{% static 'thumbnails/FE.jpeg' %}" alt="Generic Featured thumbnail" width="96"
+									height="96">
+								{%else%}
+								<img src="{% static 'thumbnails/OT.jpeg' %}" alt="Generic Other thumbnail" width="96"
+									height="96">
+								{% endif %}
 							{% endif %}
 							<div class="col-lg-8">
 								<h6 class="mb-0">{{ related_post.title }}</h6>
