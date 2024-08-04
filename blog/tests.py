@@ -83,6 +83,8 @@ class BlogTests(TestCase):
 		self.assertRedirects(response, '%s?next=/post/new/' % (reverse('account_login')))
 		response = self.client.get('%s?next=/post/new/' % (reverse('account_login')))
 		self.assertContains(response, 'Log In')
+		response_account_detail = self.client.get(reverse('accountinfo',args=[str(self.user.username)] ))
+		self.assertEqual(response_account_detail.status_code,302) #log in redirect
 		
 		# tests for logged in users
 	def test_list_view_for_logged_in_user(self):
@@ -115,6 +117,8 @@ class BlogTests(TestCase):
 		})
 		response_delete = self.client.get(reverse('post_delete', args=[str(self.post.pk)]))
 		response_detail = self.client.get(self.post_url)
+		response_home = self.client.get(reverse('home'))
+		response_account_detail = self.client.get(reverse('accountinfo',args=[str(self.user.username)] ))
 		self.assertEqual(response_create.status_code, 403) #forbidden
 		self.assertEqual(response_edit.status_code,403)
 		self.assertEqual(response_delete.status_code,403)
@@ -124,6 +128,9 @@ class BlogTests(TestCase):
 		self.assertContains(response_detail, 'A good title')
 		self.assertNotContains(response_detail, '+ Edit Post')
 		self.assertNotContains(response_detail, '- Delete Blog Post')
+		self.assertContains(response_home, 'Account info')
+		self.assertContains(response_account_detail, 'Bookmarked posts')
+		self.assertContains(response_account_detail, 'Liked posts')
 		self.client.logout()
 
 	def test_CRUD__for_users_with_permissions(self): 
