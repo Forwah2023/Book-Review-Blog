@@ -7,13 +7,27 @@
 	<div class='col-md-8'>
 		<h2 class="display-5 link-body-emphasis mb-1">{{ indiv_post.title}}</h2>
 		{% if user.is_authenticated %}
-		{% if user_bookmarked_this %}
-			<a name="{{ indiv_post.pk }}" class="bookmark_link d-flex justify-content-end" id="bmk" ><i class="bi bi-bookmark-check-fill" style="font-size: 2rem" ></i>
-			</a>
-			{% else %}
-			<a name="{{ indiv_post.pk }}" class="bookmark_link d-flex justify-content-end" id="bmk"><i class="bi bi-bookmark-plus-fill" style="font-size: 2rem"></i>
-			</a>
-		{% endif %}
+			<div class="row">
+				<div class="col-10"></div>
+				<div class="col-1 d-flex justify-content-end">
+					{% if user_bookmarked_this %}
+						<a name="{{ indiv_post.pk }}" class="bookmark_link " id="bmk" ><i class="bi bi-bookmark-check-fill" style="font-size: 2rem" ></i>
+						</a>
+					{% else %}
+						<a name="{{ indiv_post.pk }}" class="bookmark_link " id="bmk"><i class="bi bi-bookmark-plus-fill" style="font-size: 2rem"></i>
+						</a>
+					{% endif %}
+				</div>
+				<div class="col-1 d-flex justify-content-end">
+					{% if user_liked_this %}
+					<a name="{{ indiv_post.pk }}" class="like_link" id="lke" ><i class="bi bi-heart-fill" style="font-size: 2rem" ></i>
+					</a>
+					{% else %}
+					<a name="{{ indiv_post.pk }}" class="like_link" id="lke"><i class="bi bi-heart" style="font-size: 2rem"></i>
+					</a>			
+					{% endif %}
+				</div>
+			</div>
 		{% endif %}
 		<p class="blog-post">{{ indiv_post.body|bleach}}</p>
 		
@@ -97,6 +111,7 @@
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
+// Handle bookmark button clicks
 $('.bookmark_link').click(function(){
     $.ajax({
              type: 'POST',
@@ -113,6 +128,31 @@ $('.bookmark_link').click(function(){
                     else if(response.bookmarked==false){
 					  icon.classList.remove('bi-bookmark-check-fill');
 					  icon.classList.add('bi-bookmark-plus-fill');
+                    }
+
+
+              }
+
+        });
+
+  })
+// Handle like button clicks
+  $('.like_link').click(function(){
+    $.ajax({
+             type: 'POST',
+             url:'{% url "post_detail" indiv_post.pk %}', 
+             data: {'post_pk': $(this).attr('name'),'operation':'like_update','csrfmiddlewaretoken': '{{ csrf_token }}'},
+             dataType: "json",
+             success: function(response) {
+			  var lkd=document.getElementById("lke");
+			  var icon = lkd.querySelector('i');
+                    if(response.liked==true){
+					   icon.classList.remove('bi-heart');
+					   icon.classList.add('bi-heart-fill');
+					  }
+                    else if(response.liked==false){
+					  icon.classList.remove('bi-heart-fill');
+					  icon.classList.add('bi-heart');
                     }
 
 

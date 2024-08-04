@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import BlogListView,BlogDetailView,BlogCreateView,BlogUpdateView,BlogDeleteView,AllGenreView,\
-BlogGenreListView,SubscribeView,SubscribeThanksView,SearchListView,AboutView,PrivacyView,AccountInfoView,BookmarkListView
+BlogGenreListView,SubscribeView,SubscribeThanksView,SearchListView,AboutView,PrivacyView,AccountInfoView,BookmarkListView,LikeListView
 
 
 urlpatterns = [
@@ -18,6 +18,7 @@ path('about/', AboutView.as_view(), name='about'),
 path('privacy/', PrivacyView.as_view(), name='privacy'),
 path('user/<current_user>/', AccountInfoView.as_view(), name='accountinfo'),
 path('user/<current_user>/bookmarks', BookmarkListView.as_view(), name='bookmarks'),
+path('user/<current_user>/likes', LikeListView.as_view(), name='likes'),
 
 
 ]

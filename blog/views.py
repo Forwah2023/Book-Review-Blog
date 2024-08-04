@@ -13,7 +13,7 @@ from django.contrib.sites.models import Site
 from django.core.mail import send_mail
 from django.db.models import Q
 
-from .models import Post,Bookmark
+from .models import Post,Bookmark,Like
 # Create your views here.
 
 #CRUD viewa
@@ -52,16 +52,18 @@ class BlogDetailView(DetailView):
 		# select three recent related reviews
 		qs=qs.filter(genre=cur_obj.genre)[:4] 
 		data['recent_related']=qs
-		# prepare bookmark data
+		# check bookmark status
 		data['user_bookmarked_this'] =cur_obj.bookmarks.filter(user=self.request.user.id,post=cur_obj).exists()
+		# check like status
+		data['user_liked_this'] =cur_obj.likes.filter(user=self.request.user.id,post=cur_obj).exists()
 		return data
 		
 	def post(self, request, *args, **kwargs):
 		if request.accepts("application/json"):
 			# Handle AJAX 
+			post_pk=request.POST.get('post_pk', None)
+			curr_post=get_object_or_404(Post,pk=post_pk)			
 			if request.POST.get("operation") == 'bookmark_update':
-				post_pk=request.POST.get('post_pk', None)
-				curr_post=get_object_or_404(Post,pk=post_pk)
 				new_bookmark, created = Bookmark.objects.get_or_create(user=request.user, post=curr_post)
 				if not created:
 					Bookmark.objects.get(user=request.user, post=curr_post).delete()
@@ -69,6 +71,15 @@ class BlogDetailView(DetailView):
 				else:
 					bookmarked=True
 				data={'bookmarked':bookmarked,'post_pk':post_pk}
+				return JsonResponse(data)
+			elif request.POST.get("operation") == 'like_update':
+				new_like, created = Like.objects.get_or_create(user=request.user, post=curr_post)
+				if not created:
+					Like.objects.get(user=request.user, post=curr_post).delete()
+					liked=False
+				else:
+					liked=True
+				data={'liked':liked,'post_pk':post_pk}
 				return JsonResponse(data)
 		else:
 		# Proceed with regular view logic
@@ -136,6 +147,14 @@ class BookmarkListView(LoginRequiredMixin,ListView):
 		qs=Bookmark.objects.filter(user=self.request.user)
 		return qs
 
+class LikeListView(LoginRequiredMixin,ListView):
+	paginate_by = 10
+	template_name = 'like_list.html'
+	context_object_name = 'like_list'
+	login_url = 'account_login'
+	def get_queryset(self):
+		qs=Like.objects.filter(user=self.request.user)
+		return qs
 
 class BlogGenreListView(ListView):
 	model = Post
@@ -204,6 +223,7 @@ class AccountInfoView(LoginRequiredMixin,TemplateView):
 		data = super().get_context_data(**kwargs)
 		data['num_created_posts']=len(Post.objects.filter(author=self.request.user))
 		data['num_bookmarked_posts']=len(Bookmark.objects.filter(user=self.request.user))
+		data['num_liked_posts']=len(Like.objects.filter(user=self.request.user))
 		return data
 	
 class PrivacyView(TemplateView):

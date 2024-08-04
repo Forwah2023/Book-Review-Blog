@@ -49,6 +49,18 @@ class Bookmark(models.Model):
 	related_name='bookmarks',)
 	created = models.DateTimeField(auto_now_add=True)
 
+
+class Like(models.Model):
+	user = models.ForeignKey(
+	get_user_model(),
+	on_delete=models.CASCADE,
+	)
+	post = models.ForeignKey(
+	Post,
+	on_delete=models.CASCADE,
+	related_name='likes',)
+	created = models.DateTimeField(auto_now_add=True)
+
 class Subscriber(models.Model):
 	email = models.EmailField(unique=True)
 	name = models.CharField(max_length=100)
